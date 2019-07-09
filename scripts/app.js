@@ -12,7 +12,7 @@ cityForm.addEventListener('submit', e =>{
 
     getData(city)
     .then(data=>{
-        //const temperature= data.WeatherDetails.Temperature.Metric.Value
+        
         updateUi(data)
     })
     .catch(err=>console.log(err))
