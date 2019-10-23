@@ -2,36 +2,22 @@ const cityForm = document.querySelector('.change-location');
 const details = document.querySelector('.details')
 const card = document.querySelector('.card');
 const icon = document.querySelector('.icon img');
-const timeOfDay = document.querySelector('.time')
+const timeOfDay = document.querySelector('.time');
+const forecast = new Forecast()
 
 cityForm.addEventListener('submit', e =>{
     //prevent default 
     e.preventDefault();
     const city =e.target.city.value.trim()
     cityForm.reset();
-
-    getData(city)
-    .then(data=>{
-        //const temperature= data.WeatherDetails.Temperature.Metric.Value
-        updateUi(data)
-    })
+    // update ui with new city
+    forecast.getData(city)
+    .then(data=> updateUi(data))
     .catch(err=>console.log(err))
-
-
+    
+    // set local storage
+    localStorage.setItem('city',city)
 })
-
-// fetch data from api
-const getData = async (city)=>{
-
-    const cityDetails = await getCity(city);
-    console.log(cityDetails)
-    const weatherDetails = await getWeather(cityDetails.Key);
-    console.log(weatherDetails)
-    return {
-        cityDetails,
-        weatherDetails
-    }
-}
 
 // update UI
 
@@ -59,4 +45,10 @@ const updateUi = async (data) =>{
         card.classList.remove('d-none')
     }
 
+}
+
+if(localStorage.getItem('city')){
+    forecast.getData(localStorage.getItem('city'))
+        .then(data => updateUi(data))
+        .catch(err => console.log(err))
 }
